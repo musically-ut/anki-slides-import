@@ -2,8 +2,8 @@ from wand.image import Image
 import unittest
 
 class PdfPages:
-    def __init__(self, pdfFileName):
-        self.pdf = Image(filename=pdfFileName)
+    def __init__(self, pdfFileName, resolution=(120, 120)):
+        self.pdf = Image(filename=pdfFileName, resolution=resolution)
 
     def getPageAsPng(self, pageNumber, width=640):
         """Return the given page as a pdf wand.image.Image."""
