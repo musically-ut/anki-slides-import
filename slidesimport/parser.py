@@ -42,7 +42,9 @@ class Parser:
                 else:
                     raise ParseException(lineNumber, line)
 
-        self.slideQuestions = dict((k, '\n'.join(v)) for k, v in slideQList.items())
+        self.slideQuestions = dict( (k, '\n'.join(v))
+                                    for k, v in slideQList.items()
+                                  )
 
     def getQuestions(self):
         """Gets a dictionary of questions."""
@@ -78,6 +80,18 @@ Slide 1:
 Slide 2:
     Question-2
 
+'''
+
+multipleSlideMentions = u'''
+
+Slide 1:
+    Question-a
+
+Slide 2:
+    Question-b
+
+Slide 1:
+    Question-c
 '''
 
 
@@ -117,3 +131,9 @@ class TestParser(unittest.TestCase):
         self.assertEqual(qs[1], 'Question-1')
         self.assertEqual(qs[2], 'Question-2')
 
+    def testMultipleSlideMentions(self):
+        qs = Parser(StringIO(multipleSlideMentions)).getQuestions()
+
+        self.assertEqual(len(qs), 2)
+        self.assertEqual(qs[1], 'Question-a\nQuestion-c')
+        self.assertEqual(qs[2], 'Question-b')
