@@ -9,14 +9,18 @@ import cgi
 import argparse as A
 
 
-def getMediaPathName(collectionMediaPath, prefix, slideNumber, frmt='png'):
+def getMediaName(prefix, slideNumber, frmt='png'):
+    """Returns the relative name of the media file."""
+    return prefix + '-' + str(slideNumber) + '.' + frmt
+
+def getMediaPath(collectionMediaPath, prefix, slideNumber, frmt='png'):
     """Return the file name of the destination media file."""
-    return collectionMediaPath + prefix + str(slideNumber) + '.' + frmt
+    return os.path.join(collectionMediaPath, getMediaName(prefix, slideNumber, frmt))
 
 # TODO: Verify that argument parsers does not offer a fancy way of accepting
 # paths while verifying that they exist or not, etc.
 
-def run():
+def run(rawArgs=None):
     argParser = A.ArgumentParser()
     argParser.add_argument( 'notes',
                             help = 'The notes for the lectures. For details on how to write notes, see: TODO',
@@ -48,7 +52,10 @@ def run():
                             action = 'store_true'
                           )
 
-    args = argParser.parse_args()
+    if rawArgs is not None:
+        args = argParser.parse_args(rawArgs)
+    else:
+        args = argParser.parse_args()
 
 
     #########################################################################
@@ -68,8 +75,8 @@ def run():
         sys.exit(-1)
 
     collectionMediaPath = os.path.join(ankiPath, 'collection.media')
-    if not os.path.isdir(mediaPath):
-        print >> sys.stderr, 'Folder: {} does not exist.'.format(mediaPath)
+    if not os.path.isdir(collectionMediaPath):
+        print >> sys.stderr, 'Folder: {} does not exist.'.format(collectionMediaPath)
         print >> sys.stderr, 'Is "{}" the path to a user profile?'.format(ankiPath)
         sys.exit(-1)
 
@@ -101,7 +108,7 @@ def run():
     prefix = args.prefix or os.path.basename(args.slides)
     if not args.force:
         for slideNum in notesQuestions:
-            mediaFileName = getMediaPathName(collectionMediaPath, prefix, str(slideNum))
+            mediaFileName = getMediaPath(collectionMediaPath, prefix, str(slideNum))
             if os.path.exists(mediaFileName):
                 print >> sys.stderr, 'File "{}" already exists. Choose a different prefix (using --prefix) or use -f to overwrite the files.'.format(mediaFileName)
                 sys.exit(-1)
@@ -114,11 +121,13 @@ def run():
     print 'Starting extraction ...'
 
     deckFilePath = os.path.expandvars(os.path.expanduser(args.deck))
-    outputDeckFile = file(args.deck, 'w')
+    outputDeckFile = file(deckFilePath, 'w')
 
-    for slideNum, qs in notesQuestions.getQuestions().items():
-        mediaFileName = getMediaPathName(collectionMediaPath, prefix, slideNum)
-        outputDeckFile.write('""{0}""; <img src="{1}" />\n'.format(cgi.escape(qs), mediaFileName))
-        pdfPages.getPageAsPng(slideNum).save(mediaFileName)
+    for slideNum, qs in notesQuestions.items():
+        mediaFilePath = getMediaPath(collectionMediaPath, prefix, slideNum)
+        mediaFileName = getMediaName(prefix, slideNum)
+
+        outputDeckFile.write('"{0}"; <img src="{1}" />\n'.format(cgi.escape(qs), mediaFileName))
+        pdfPages.getPageAsPng(slideNum).save(filename=mediaFilePath)
 
 
