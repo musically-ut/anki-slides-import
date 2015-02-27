@@ -8,7 +8,9 @@ Import pdf slides + text notes into [Anki](http://ankisrs.net/).
  2. Obtain the slides in pdf format.
  3. Run `./slides_import.py <notes.txt> <slides.pdf> <output.deck>`
      - Currently, you need to add `-U "~/Documents/Anki/User 1"` to explicitly provide you [user profile folder](http://ankisrs.net/docs/manual.html#file-locations).
-  4. Open Anki and import  
+ 4. Open Anki and import the `<output.deck>` as a CSV file.
+
+The deck should be ready to use.
 
 ### Dependencies 
 
