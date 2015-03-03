@@ -2,7 +2,16 @@
 
 Import pdf slides + text notes into [Anki](http://ankisrs.net/).
 
+Convert:
+
+![Slides and notes](http://musicallyut.in/docs/anki-import-slides/slides-notes.png)
+
+to:
+
+![Anki deck](http://musicallyut.in/docs/anki-import-slides/in-anki.png)
+
 ## Usage
+
 
  1. Write your notes slide by slide in a [(formatted) plain text file](https://github.com/musically-ut/anki-slides-import/blob/master/test/example_notes.txt). 
  2. Obtain the slides in pdf format.
@@ -28,7 +37,6 @@ I made this with two use-cases in mind:
 
  1. Some concepts are easier to understand in images and extracting images from pdfs to put in cards is cumbersome.
  2. This will potentially allow one to take notes slide by slide in class and then directly import them into Anki.
-
 
 ## Next steps
 
