@@ -31,6 +31,12 @@ You can set up the dependencies required by the files by running the following:
 
     pip install -r requirements.txt
 
+You may have to [install ImageMagick](http://docs.wand-py.org/en/0.4.0/guide/install.html) for your system separately.
+
+The reason this is not available as an addon for Anki is because [only 32 bit binaries are distributed for Anki](https://anki.tenderapp.com/discussions/ankidesktop/12256-anki-app-on-mac-osx-runs-in-32-bit-mode) and that makes it impossible to use 64-bit ImageMagick libraries. Also, it is tricky to install the 32 bit libraries for ImageMagick using the standard tools (at least on Mac with `homebrew`).
+
+If I release an addon, then it will run if one checks-out and runs [Anki from source](https://github.com/dae/anki) (`./runanki` from the terminal). The version from source will use and update the database used by the system-wide Anki version. However, if one is willing to go through the trouble of doing that, then one might as well use this tool from the command line.
+
 ## Help
 
 Use `./slides_import.py -h` to see advanced help on command line options.
