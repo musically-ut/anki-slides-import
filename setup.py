@@ -6,7 +6,7 @@ REQUIRES = ["argparse"] if sys.version[:3] in ('2.6', '3.0', '3.1') else []
 REQUIRES = REQUIRES + ["wand>=0.4.0"]
 
 setup(
-    varsion='0.0.1',
+    version='0.0.1',
     name="anki-slides-import",
     author="Utkarsh Upadhyay",
     author_email="musically.ut@gmail.com",
@@ -16,7 +16,7 @@ setup(
     install_requires=REQUIRES,
     url="https://github.com/musically-ut/anki-slides-import",
     packages=["slidesimport"],
-    entry_points={ "console_script": [ "slides2anki = slidesimport.run" ]},
+    entry_points={ "console_scripts": [ "slides2anki = slidesimport.slidesimport:run" ]},
     classifiers      = [
         "License :: OSI Approved :: MIT License",
         "Intended Audience :: Science/Research",
