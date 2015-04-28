@@ -129,5 +129,3 @@ def run(rawArgs=None):
 
         outputDeckFile.write('"{0}"; <img src="{1}" />\n'.format(cgi.escape(qs), mediaFileName))
         pdfPages.getPageAsPng(slideNum).save(filename=mediaFilePath)
-
-
