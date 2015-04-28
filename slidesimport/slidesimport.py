@@ -23,7 +23,7 @@ def getMediaPath(collectionMediaPath, prefix, slideNumber, frmt='png'):
 def run(rawArgs=None):
     argParser = A.ArgumentParser()
     argParser.add_argument( 'notes',
-                            help = 'The notes for the lectures. For details on how to write notes, see: TODO',
+                            help = 'The notes for the lectures. For details on how to write notes, see: https://gist.github.com/musically-ut/5b5835c06470842cf752',
                             type = str
                           )
 
