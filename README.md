@@ -18,7 +18,7 @@ to:
 
  0. Use `pip` to install it on your system: 
   
-        pip install git+https://github.com/musically-ut/anki-slides-import@master#egg=AnkiSlidesImport
+        pip install git+https://github.com/musically-ut/anki-slides-import
 
  1. Write your notes slide by slide in a [plain text file](https://github.com/musically-ut/anki-slides-import/blob/master/test/example_notes.txt). 
  2. Obtain the slides in pdf format.
