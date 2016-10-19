@@ -89,7 +89,8 @@ def run(rawArgs=None):
     try:
         notesFilePath = os.path.expandvars(os.path.expanduser(args.notes))
         # notesQuestions = Parser(file(notesFilePath, 'r')).getQuestions()
-        notesQuestions, notesQuestionsWithoutSlides, notesAnswersWithoutSlides = Parser(file(notesFilePath, 'r')).getQAndAParsing()
+        (notesQuestions, notesQWS, notesQFBS, notesSFBQ, notesAWS, notesAFBS, notesSFBA) = \
+            Parser(file(notesFilePath, 'r')).getQAndAParsing()
         pdfPages = PdfPages(os.path.expandvars(os.path.expanduser(args.slides)))
     except IOError as e:
         print >> sys.stderr, "Error while reading source files: "
@@ -130,15 +131,27 @@ def run(rawArgs=None):
 
         fallback_flag = False
 
-        # If the "question without slide" field exists, write that
-        if notesQuestionsWithoutSlides[slideNum] != '':
-            outputDeckFile.write('"{0}"; '.format(cgi.escape(notesQuestionsWithoutSlides[slideNum])))
+        # If the "question without slide" dict entry is not empty, write that
+        if notesQWS[slideNum] != '':
+            outputDeckFile.write('"{0}"; '.format(cgi.escape(notesQWS[slideNum])))
+        # Otherwise try "question followed by slide"
+        elif notesQFBS[slideNum] != '':
+            outputDeckFile.write('<div>{0}</div><img src="{1}" />; '.format(cgi.escape(notesQFBS[slideNum]), mediaFileName))
+        # Otherwise try "slide followed by question"
+        elif notesSFBQ[slideNum] != '':
+            outputDeckFile.write('<img src="{0}" /><div>{1}</div>; '.format(mediaFileName, cgi.escape(notesSFBQ[slideNum])))
         else:
             fallback_flag = True
 
-        # If the "answer without slide" field exists, write that
-        if notesAnswersWithoutSlides[slideNum] != '':
-            outputDeckFile.write('"{0}"\n'.format(cgi.escape(notesAnswersWithoutSlides[slideNum])))
+        # If the "answer without slide" dict entry is not empty, write that
+        if notesAWS[slideNum] != '':
+            outputDeckFile.write('"{0}"\n'.format(cgi.escape(notesAWS[slideNum])))
+        # Otherwise try "answer followed by slide"
+        elif notesAFBS[slideNum] != '':
+            outputDeckFile.write('<div>{0}</div><img src="{1}" />\n'.format(cgi.escape(notesAFBS[slideNum]), mediaFileName))
+        # Otherwise try "slide followed by answer"
+        elif notesSFBA[slideNum] != '':
+            outputDeckFile.write('<img src="{0}" /><div>{1}</div>\n'.format(mediaFileName, cgi.escape(notesSFBA[slideNum])))
         else:
             fallback_flag = True
 
