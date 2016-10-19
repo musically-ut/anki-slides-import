@@ -1,6 +1,6 @@
 # anki-slides-import
 
-Import pdf slides + text notes into [Anki](http://ankisrs.net/).
+This is a fork of [Utkarsh Upadhyay's](https://github.com/musically-ut) [anki-slides-import](https://github.com/musically-ut/anki-slides-import) code that imports pdf slides + text notes into [Anki](http://ankisrs.net/) that includes some additional functionality.
 
 Convert:
 
