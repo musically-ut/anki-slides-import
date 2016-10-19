@@ -1,6 +1,6 @@
 # anki-slides-import
 
-This is a fork of [Utkarsh Upadhyay's](https://github.com/musically-ut) [anki-slides-import](https://github.com/musically-ut/anki-slides-import) code for importing pdf slides + text notes into [Anki](http://ankisrs.net/) that includes some additional functionality.  This modified version allows for slides to be displayed either in the Anki card question or answer, to be invluded alongside some additional text either before or after the slide, or to be left out completely.
+This is a fork of [Utkarsh Upadhyay's](https://github.com/musically-ut) [anki-slides-import](https://github.com/musically-ut/anki-slides-import) code for importing PDF slides + text notes into [Anki](http://ankisrs.net/) that includes some additional functionality.  This modified version allows for PDF slides to be displayed either in the Anki card question or answer, to be invluded alongside some additional text either before or after the slide, or to be left out completely.
 
 Convert:
 
