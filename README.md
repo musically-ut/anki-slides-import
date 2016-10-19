@@ -29,6 +29,17 @@ to:
 
 The deck should be ready to use.
 
+### Anki Card Modifiers
+
+The [`test/example_notes_q_and_a.txt`](https://github.com/musically-ut/anki-slides-import/blob/master/test/example_notes_q_and_a.txt) file provides examples of how to use Anki card modifiers to alter the behaviour of Anki card generation and slide insertion.  The available slide modifiers are listed as follows:
+
+  * `Q: ` - Include the succeeding text as a standalone question without a slide (default behaviour without card modifiers).
+  * `Q_S: ` - Include the succeeding text as a question followed by the current slide.
+  * `S_Q: ` - Include the current slide followed by the succeeding text as a question.
+  * `A: ` - Include the succeeding text as a standalone answer without a slide.
+  * `A_S: ` - Include the succeeding text as an answer followed by the current slide.
+  * `S_A: ` - Include the current slide followed by the succeeding text as an answer.
+
 ### Dependencies 
 
 You may have to [install ImageMagick](http://docs.wand-py.org/en/0.4.0/guide/install.html) for your system separately.
