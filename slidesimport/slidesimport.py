@@ -88,7 +88,8 @@ def run(rawArgs=None):
     print "Reading files ..."
     try:
         notesFilePath = os.path.expandvars(os.path.expanduser(args.notes))
-        notesQuestions = Parser(file(notesFilePath, 'r')).getQuestions()
+        # notesQuestions = Parser(file(notesFilePath, 'r')).getQuestions()
+        notesQuestions, notesQuestionsWithoutSlides, notesAnswersWithoutSlides = Parser(file(notesFilePath, 'r')).getQAndAParsing()
         pdfPages = PdfPages(os.path.expandvars(os.path.expanduser(args.slides)))
     except IOError as e:
         print >> sys.stderr, "Error while reading source files: "
@@ -127,5 +128,23 @@ def run(rawArgs=None):
         mediaFilePath = getMediaPath(collectionMediaPath, prefix, slideNum)
         mediaFileName = getMediaName(prefix, slideNum)
 
-        outputDeckFile.write('"{0}"; <img src="{1}" />\n'.format(cgi.escape(qs), mediaFileName))
+        fallback_flag = False
+
+        # If the "question without slide" field exists, write that
+        if notesQuestionsWithoutSlides[slideNum] != '':
+            outputDeckFile.write('"{0}"; '.format(cgi.escape(notesQuestionsWithoutSlides[slideNum])))
+        else:
+            fallback_flag = True
+
+        # If the "answer without slide" field exists, write that
+        if notesAnswersWithoutSlides[slideNum] != '':
+            outputDeckFile.write('"{0}"\n'.format(cgi.escape(notesAnswersWithoutSlides[slideNum])))
+        else:
+            fallback_flag = True
+
+        # If we have failed to provide a valid question/answer combination so far,
+        # fall back to using the default behaviour.
+        if fallback_flag:
+            outputDeckFile.write('"{0}"; <img src="{1}" />\n'.format(cgi.escape(qs), mediaFileName))
+
         pdfPages.getPageAsPng(slideNum).save(filename=mediaFilePath)
