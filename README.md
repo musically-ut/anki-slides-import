@@ -1,6 +1,6 @@
 # anki-slides-import
 
-Import pdf slides + text notes into [Anki](http://ankisrs.net/).
+This is a fork of [Utkarsh Upadhyay's](https://github.com/musically-ut) [anki-slides-import](https://github.com/musically-ut/anki-slides-import) code for importing PDF slides + text notes into [Anki](http://ankisrs.net/) that includes some additional functionality.  This modified version allows for the PDF slides to be displayed either in the Anki card question or answer, to be included alongside some additional text either before or after the slide, or to be left out completely.
 
 Convert:
 
@@ -18,9 +18,9 @@ to:
 
  0. Use `pip` to install it on your system: 
   
-        pip install git+https://github.com/musically-ut/anki-slides-import
+        pip install git+https://github.com/barryridge/anki-slides-import
 
- 1. Write your notes slide by slide in a [plain text file](https://github.com/musically-ut/anki-slides-import/blob/master/test/example_notes.txt). 
+ 1. Write your notes slide by slide in a [plain text file](https://github.com/barryridge/anki-slides-import/blob/master/test/example_notes.txt).
  2. Obtain the slides in pdf format.
  3. Run `slides2anki <notes.txt> <slides.pdf> <output.deck.name>`. 
      - Currently, you need to add `-U "~/Documents/Anki/User 1"` to explicitly provide you [user profile folder](http://ankisrs.net/docs/manual.html#file-locations).
@@ -28,6 +28,17 @@ to:
  4. Open Anki and import the `<output.deck>` as a CSV file.
 
 The deck should be ready to use.
+
+### Anki Card Modifiers
+
+The [`test/example_notes_q_and_a.txt`](https://github.com/barryridge/anki-slides-import/blob/master/test/example_notes_q_and_a.txt) file provides examples of how to use Anki card modifiers to alter the behaviour of Anki card generation and slide insertion.  The available slide modifiers are listed as follows:
+
+  * `Q: ` - Include the succeeding text as a standalone question without a slide (default behaviour without card modifiers).
+  * `Q_S: ` - Include the succeeding text as a question followed by the current slide.
+  * `S_Q: ` - Include the current slide followed by the succeeding text as a question.
+  * `A: ` - Include the succeeding text as a standalone answer without a slide.
+  * `A_S: ` - Include the succeeding text as an answer followed by the current slide.
+  * `S_A: ` - Include the current slide followed by the succeeding text as an answer.
 
 ### Dependencies 
 
