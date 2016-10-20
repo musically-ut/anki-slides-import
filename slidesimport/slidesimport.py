@@ -129,7 +129,7 @@ def run(rawArgs=None):
         mediaFilePath = getMediaPath(collectionMediaPath, prefix, slideNum)
         mediaFileName = getMediaName(prefix, slideNum)
 
-        fallback_flag = False
+        fallbackFlag = False
 
         # If the "question without slide" dict entry is not empty, write that
         if notesQWS[slideNum] != '':
@@ -141,7 +141,7 @@ def run(rawArgs=None):
         elif notesSFBQ[slideNum] != '':
             outputDeckFile.write('<img src="{0}" /><div>{1}</div>; '.format(mediaFileName, cgi.escape(notesSFBQ[slideNum])))
         else:
-            fallback_flag = True
+            fallbackFlag = True
 
         # If the "answer without slide" dict entry is not empty, write that
         if notesAWS[slideNum] != '':
@@ -153,11 +153,11 @@ def run(rawArgs=None):
         elif notesSFBA[slideNum] != '':
             outputDeckFile.write('<img src="{0}" /><div>{1}</div>\n'.format(mediaFileName, cgi.escape(notesSFBA[slideNum])))
         else:
-            fallback_flag = True
+            fallbackFlag = True
 
         # If we have failed to provide a valid question/answer combination so far,
         # fall back to using the default behaviour.
-        if fallback_flag:
+        if fallbackFlag:
             outputDeckFile.write('"{0}"; <img src="{1}" />\n'.format(cgi.escape(qs), mediaFileName))
 
         pdfPages.getPageAsPng(slideNum).save(filename=mediaFilePath)

@@ -91,15 +91,15 @@ class Parser:
                 else:
                     raise ParseException(lineNumber, line)
 
-        self.slideQuestions = self.list_to_dict(slideQList)
-        self.slideQuestionsWithoutSlides = self.list_to_dict(slideQWSList)
-        self.slideQuestionsFollowedBySlides = self.list_to_dict(slideQFBSList)
-        self.slideSlidesFollowedByQuestions = self.list_to_dict(slideSFBQList)
-        self.slideAnswersWithoutSlides = self.list_to_dict(slideAWSList)
-        self.slideAnswersFollowedBySlides = self.list_to_dict(slideAFBSList)
-        self.slideSlidesFollowedByAnswers = self.list_to_dict(slideSFBAList)
+        self.slideQuestions = self.listToDict(slideQList)
+        self.slideQuestionsWithoutSlides = self.listToDict(slideQWSList)
+        self.slideQuestionsFollowedBySlides = self.listToDict(slideQFBSList)
+        self.slideSlidesFollowedByQuestions = self.listToDict(slideSFBQList)
+        self.slideAnswersWithoutSlides = self.listToDict(slideAWSList)
+        self.slideAnswersFollowedBySlides = self.listToDict(slideAFBSList)
+        self.slideSlidesFollowedByAnswers = self.listToDict(slideSFBAList)
 
-    def list_to_dict(self, x):
+    def listToDict(self, x):
         return dict((k, '\n'.join(v)) for k, v in x.items())    
 
     def getQuestions(self):
