@@ -91,40 +91,20 @@ class Parser:
                 else:
                     raise ParseException(lineNumber, line)
 
-        self.slideQuestions = dict( (k, '\n'.join(v))
-                                    for k, v in slideQList.items()
-                                  )
+        self.slideQuestions = self.list_to_dict(slideQList)
+        self.slideQuestionsWithoutSlides = self.list_to_dict(slideQWSList)
+        self.slideQuestionsFollowedBySlides = self.list_to_dict(slideQFBSList)
+        self.slideSlidesFollowedByQuestions = self.list_to_dict(slideSFBQList)
+        self.slideAnswersWithoutSlides = self.list_to_dict(slideAWSList)
+        self.slideAnswersFollowedBySlides = self.list_to_dict(slideAFBSList)
+        self.slideSlidesFollowedByAnswers = self.list_to_dict(slideSFBAList)
 
-        self.slideQuestionsWithoutSlides = dict( (k, '\n'.join(v))
-                                                 for k, v in slideQWSList.items()
-                                               )
-        
-        self.slideQuestionsFollowedBySlides = dict( (k, '\n'.join(v))
-                                                    for k, v in slideQFBSList.items()
-                                                  )
-        
-        self.slideSlidesFollowedByQuestions = dict( (k, '\n'.join(v))
-                                                    for k, v in slideSFBQList.items()
-                                                  )
-        
-        self.slideAnswersWithoutSlides = dict( (k, '\n'.join(v))
-                                                 for k, v in slideAWSList.items()
-                                               )
-        
-        self.slideAnswersFollowedBySlides = dict( (k, '\n'.join(v))
-                                                  for k, v in slideAFBSList.items()
-                                                )
-        
-        self.slideSlidesFollowedByAnswers = dict( (k, '\n'.join(v))
-                                                  for k, v in slideSFBAList.items()
-                                                )
-
-
+    def list_to_dict(self, x):
+        return dict((k, '\n'.join(v)) for k, v in x.items())    
 
     def getQuestions(self):
         """Gets a dictionary of questions."""
         return self.slideQuestions
-        # return self.slideQuestionsAndAnswers
     
     def getQAndAParsing(self):
         """Gets dictionaries of various question and answer parsings."""
