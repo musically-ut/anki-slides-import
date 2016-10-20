@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pdfpages import PdfPages
-from parser import Parser, ParseException
+from parser import Parser, ParseException, QAndAParsing
 
 import sys
 import os
@@ -88,9 +88,7 @@ def run(rawArgs=None):
     print "Reading files ..."
     try:
         notesFilePath = os.path.expandvars(os.path.expanduser(args.notes))
-        # notesQuestions = Parser(file(notesFilePath, 'r')).getQuestions()
-        (notesQuestions, notesQWS, notesQFBS, notesSFBQ, notesAWS, notesAFBS, notesSFBA) = \
-            Parser(file(notesFilePath, 'r')).getQAndAParsing()
+        notes = Parser(file(notesFilePath, 'r')).getQAndAParsing()
         pdfPages = PdfPages(os.path.expandvars(os.path.expanduser(args.slides)))
     except IOError as e:
         print >> sys.stderr, "Error while reading source files: "
@@ -109,7 +107,7 @@ def run(rawArgs=None):
 
     prefix = args.prefix or os.path.basename(args.slides)
     if not args.force:
-        for slideNum in notesQuestions:
+        for slideNum in notes.fullNotes:
             mediaFileName = getMediaPath(collectionMediaPath, prefix, str(slideNum))
             if os.path.exists(mediaFileName):
                 print >> sys.stderr, 'File "{}" already exists. Choose a different prefix (using --prefix) or use -f to overwrite the files.'.format(mediaFileName)
@@ -125,39 +123,38 @@ def run(rawArgs=None):
     deckFilePath = os.path.expandvars(os.path.expanduser(args.deck))
     outputDeckFile = file(deckFilePath, 'w')
 
-    for slideNum, qs in notesQuestions.items():
+    for slideNum, qs in notes.fullNotes.items():
         mediaFilePath = getMediaPath(collectionMediaPath, prefix, slideNum)
         mediaFileName = getMediaName(prefix, slideNum)
 
-        fallbackFlag = False
+        outputString = ''
 
         # If the "question without slide" dict entry is not empty, write that
-        if notesQWS[slideNum] != '':
-            outputDeckFile.write('"{0}"; '.format(cgi.escape(notesQWS[slideNum])))
+        if notes.questionsWithoutSlides[slideNum] != '':
+            outputString += '"{0}"; '.format(cgi.escape(notes.questionsWithoutSlides[slideNum]))
         # Otherwise try "question followed by slide"
-        elif notesQFBS[slideNum] != '':
-            outputDeckFile.write('<div>{0}</div><img src="{1}" />; '.format(cgi.escape(notesQFBS[slideNum]), mediaFileName))
+        elif notes.questionsFollowedBySlides[slideNum] != '':
+            outputString += '<div>{0}</div><img src="{1}" />; '.format(cgi.escape(notes.questionsFollowedBySlides[slideNum]), mediaFileName)
         # Otherwise try "slide followed by question"
-        elif notesSFBQ[slideNum] != '':
-            outputDeckFile.write('<img src="{0}" /><div>{1}</div>; '.format(mediaFileName, cgi.escape(notesSFBQ[slideNum])))
+        elif notes.slidesFollowedByQuestions[slideNum] != '':
+            outputString += '<img src="{0}" /><div>{1}</div>; '.format(mediaFileName, cgi.escape(notes.slidesFollowedByQuestions[slideNum]))
+        # Otherwise fall back to default behaviour
         else:
-            fallbackFlag = True
+            outputString += '"{0}"; '.format(cgi.escape(qs))
 
         # If the "answer without slide" dict entry is not empty, write that
-        if notesAWS[slideNum] != '':
-            outputDeckFile.write('"{0}"\n'.format(cgi.escape(notesAWS[slideNum])))
+        if notes.answersWithoutSlides[slideNum] != '':
+            outputString += '"{0}"\n'.format(cgi.escape(notes.answersWithoutSlides[slideNum]))
         # Otherwise try "answer followed by slide"
-        elif notesAFBS[slideNum] != '':
-            outputDeckFile.write('<div>{0}</div><img src="{1}" />\n'.format(cgi.escape(notesAFBS[slideNum]), mediaFileName))
+        elif notes.answersFollowedBySlides[slideNum] != '':
+            outputString += '<div>{0}</div><img src="{1}" />\n'.format(cgi.escape(notes.answersFollowedBySlides[slideNum]), mediaFileName)
         # Otherwise try "slide followed by answer"
-        elif notesSFBA[slideNum] != '':
-            outputDeckFile.write('<img src="{0}" /><div>{1}</div>\n'.format(mediaFileName, cgi.escape(notesSFBA[slideNum])))
+        elif notes.slidesFollowedByAnswers[slideNum] != '':
+            outputString += '<img src="{0}" /><div>{1}</div>\n'.format(mediaFileName, cgi.escape(notes.slidesFollowedByAnswers[slideNum]))
+        # Otherwise fall back to default behaviour
         else:
-            fallbackFlag = True
+            outputString += '<img src="{0}" />\n'.format(mediaFileName)
 
-        # If we have failed to provide a valid question/answer combination so far,
-        # fall back to using the default behaviour.
-        if fallbackFlag:
-            outputDeckFile.write('"{0}"; <img src="{1}" />\n'.format(cgi.escape(qs), mediaFileName))
-
+        # Write output
+        outputDeckFile.write(outputString)
         pdfPages.getPageAsPng(slideNum).save(filename=mediaFilePath)

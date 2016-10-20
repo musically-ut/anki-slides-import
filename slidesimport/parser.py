@@ -1,6 +1,16 @@
 import unittest
 import re
 from io import StringIO
+from collections import namedtuple
+        
+QAndAParsing = namedtuple('QAndAParsing',
+                          ['fullNotes',
+                           'questionsWithoutSlides',
+                           'questionsFollowedBySlides',
+                           'slidesFollowedByQuestions',
+                           'answersWithoutSlides',
+                           'answersFollowedBySlides',
+                           'slidesFollowedByAnswers'])
 
 class ParseException(BaseException):
     def __init__(self, lineNumber, line):
@@ -108,9 +118,16 @@ class Parser:
     
     def getQAndAParsing(self):
         """Gets dictionaries of various question and answer parsings."""
-        return (self.slideQuestions,
-                self.slideQuestionsWithoutSlides, self.slideQuestionsFollowedBySlides, self.slideSlidesFollowedByQuestions,
-                self.slideAnswersWithoutSlides, self.slideAnswersFollowedBySlides, self.slideSlidesFollowedByAnswers)
+    
+        qAndAParsing = QAndAParsing(self.slideQuestions,
+                                    self.slideQuestionsWithoutSlides,
+                                    self.slideQuestionsFollowedBySlides,
+                                    self.slideSlidesFollowedByQuestions,
+                                    self.slideAnswersWithoutSlides,
+                                    self.slideAnswersFollowedBySlides,
+                                    self.slideSlidesFollowedByAnswers)
+
+        return qAndAParsing
 
 
 singleSlide = u'''Slide 1:
