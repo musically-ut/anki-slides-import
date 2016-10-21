@@ -68,7 +68,7 @@ I made this with two use cases in mind:
 ## Next steps
 
  - Allow markdown in the slide notes
- 
- # Acknowledgements
- 
-  - [@barryridge](https://github.com/barryridge) for major changes to parsing of notes file.
+
+# Acknowledgements
+
+ - [@barryridge](https://github.com/barryridge) for major changes to parsing of notes file.
