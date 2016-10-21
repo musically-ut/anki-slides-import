@@ -10,7 +10,7 @@ class PdfPages:
         # The page numbers are indexed with base 0, while page numbers start
         # from 1.
         img = Image(image = self.pdf.sequence[pageNumber - 1])
-        img.resize(width, long(width * img.height / (1.0 * img.width)))
+        img.resize(width, int(width * img.height / (1.0 * img.width)))
         return img.convert('png')
 
 

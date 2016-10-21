@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from pdfpages import PdfPages
-from parser import Parser, ParseException, QAndAParsing
+from __future__ import print_function
+
+from .pdfpages import PdfPages
+from .parser import Parser, ParseException, QAndAParsing
 
 import sys
 import os
@@ -60,46 +62,46 @@ def run(rawArgs=None):
 
     #########################################################################
 
-    print 'Verifying arguments ...'
+    print('Verifying arguments ...')
 
     # Check for existence of user folder first
     if args.anki is None:
-        print >> sys.stderr, 'Giving a User folder is necessary.'
-        print >> sys.stderr, 'Requirement will soon be removed.'
+        print('Giving a User folder is necessary.', file=sys.stderr)
+        print('Requirement will soon be removed.', file=sys.stderr)
         sys.exit(-1)
 
     ankiPath = os.path.expanduser(args.anki)
 
     if not os.path.isdir(ankiPath):
-        print >> sys.stderr, 'Folder: {} does not exist.'.format(ankiPath)
+        print('Folder: {} does not exist.'.format(ankiPath), file=sys.stderr)
         sys.exit(-1)
 
     collectionMediaPath = os.path.join(ankiPath, 'collection.media')
     if not os.path.isdir(collectionMediaPath):
-        print >> sys.stderr, 'Folder: {} does not exist.'.format(collectionMediaPath)
-        print >> sys.stderr, 'Is "{}" the path to a user profile?'.format(ankiPath)
+        print('Folder: {} does not exist.'.format(collectionMediaPath), file=sys.stderr)
+        print('Is "{}" the path to a user profile?'.format(ankiPath), file=sys.stderr)
         sys.exit(-1)
 
-    print 'Done.'
+    print('Done.')
 
 
     #########################################################################
 
-    print "Reading files ..."
+    print('Reading files ...')
     try:
         notesFilePath = os.path.expandvars(os.path.expanduser(args.notes))
-        notes = Parser(file(notesFilePath, 'r')).getQAndAParsing()
+        notes = Parser(open(notesFilePath, 'r')).getQAndAParsing()
         pdfPages = PdfPages(os.path.expandvars(os.path.expanduser(args.slides)))
     except IOError as e:
-        print >> sys.stderr, "Error while reading source files: "
-        print >> sys.stderr, e
+        print("Error while reading source files: ", file=sys.stderr)
+        print(e, file=sys.stderr)
         sys.exit(-1)
     except ParseException as e:
-        print >> sys.stderr, "Parsing error:"
-        print >> sys.stderr, e.message
+        print("Parsing error:", file=sys.stderr)
+        print(e.message, file=sys.stderr)
         sys.exit(-1)
 
-    print 'Done reading files.'
+    print('Done reading files.')
 
     #######################################################################
     # Determine if any file be overwritten
@@ -110,7 +112,7 @@ def run(rawArgs=None):
         for slideNum in notes.fullNotes:
             mediaFileName = getMediaPath(collectionMediaPath, prefix, str(slideNum))
             if os.path.exists(mediaFileName):
-                print >> sys.stderr, 'File "{}" already exists. Choose a different prefix (using --prefix) or use -f to overwrite the files.'.format(mediaFileName)
+                print('File "{}" already exists. Choose a different prefix (using --prefix) or use -f to overwrite the files.'.format(mediaFileName), file=sys.stderr)
                 sys.exit(-1)
 
 
@@ -118,10 +120,10 @@ def run(rawArgs=None):
     # Operation begins, potentially destructive changes beyond this point
     #######################################################################
 
-    print 'Starting extraction ...'
+    print('Starting extraction ...')
 
     deckFilePath = os.path.expandvars(os.path.expanduser(args.deck))
-    outputDeckFile = file(deckFilePath, 'w')
+    outputDeckFile = open(deckFilePath, 'w')
 
     for slideNum, qs in notes.fullNotes.items():
         mediaFilePath = getMediaPath(collectionMediaPath, prefix, slideNum)
