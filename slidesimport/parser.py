@@ -2,7 +2,7 @@ import unittest
 import re
 from io import StringIO
 from collections import namedtuple
-        
+
 QAndAParsing = namedtuple('QAndAParsing',
                           ['fullNotes',
                            'questionsWithoutSlides',
@@ -78,19 +78,19 @@ class Parser:
 
                 if questionWithoutSlideLineMatch is not None:
                     slideQWSList[slideNum].append(questionWithoutSlideLineMatch.group('line'))
-                
+
                 if questionFollowedBySlideLineMatch is not None:
                     slideQFBSList[slideNum].append(questionFollowedBySlideLineMatch.group('line'))
-                
+
                 if slideFollowedByQuestionLineMatch is not None:
                     slideSFBQList[slideNum].append(slideFollowedByQuestionLineMatch.group('line'))
 
                 if answerWithoutSlideLineMatch is not None:
                     slideAWSList[slideNum].append(answerWithoutSlideLineMatch.group('line'))
-                
+
                 if answerFollowedBySlideLineMatch is not None:
                     slideAFBSList[slideNum].append(answerFollowedBySlideLineMatch.group('line'))
-                
+
                 if slideFollowedByAnswerLineMatch is not None:
                     slideSFBAList[slideNum].append(slideFollowedByAnswerLineMatch.group('line'))
 
@@ -110,15 +110,15 @@ class Parser:
         self.slideSlidesFollowedByAnswers = self.listToDict(slideSFBAList)
 
     def listToDict(self, x):
-        return dict((k, '\n'.join(v)) for k, v in x.items())    
+        return {k: '\n'.join(v) for k, v in x.items()}
 
     def getQuestions(self):
         """Gets a dictionary of questions."""
         return self.slideQuestions
-    
+
     def getQAndAParsing(self):
         """Gets dictionaries of various question and answer parsings."""
-    
+
         qAndAParsing = QAndAParsing(self.slideQuestions,
                                     self.slideQuestionsWithoutSlides,
                                     self.slideQuestionsFollowedBySlides,
@@ -288,7 +288,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(len(qs), 2)
         self.assertEqual(qs[1], 'Question-a\nQuestion-c')
         self.assertEqual(qs[2], 'Question-b')
-    
+
     def testSingleSlideQ(self):
         p = Parser(StringIO(singleSlideQ))
         qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
@@ -307,7 +307,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(a[1], '')
         self.assertEqual(a_s[1], '')
         self.assertEqual(s_a[1], '')
-    
+
     def testSingleSlideQ_S(self):
         p = Parser(StringIO(singleSlideQ_S))
         qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
@@ -326,7 +326,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(a[1], '')
         self.assertEqual(a_s[1], '')
         self.assertEqual(s_a[1], '')
-    
+
     def testSingleSlideS_Q(self):
         p = Parser(StringIO(singleSlideS_Q))
         qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
@@ -345,7 +345,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(a[1], '')
         self.assertEqual(a_s[1], '')
         self.assertEqual(s_a[1], '')
-    
+
     def testSingleSlideA(self):
         p = Parser(StringIO(singleSlideA))
         qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
@@ -364,7 +364,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(a[1], 'Answer')
         self.assertEqual(a_s[1], '')
         self.assertEqual(s_a[1], '')
-    
+
     def testSingleSlideA_S(self):
         p = Parser(StringIO(singleSlideA_S))
         qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
@@ -383,7 +383,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(a[1], '')
         self.assertEqual(a_s[1], 'Answer')
         self.assertEqual(s_a[1], '')
-    
+
     def testSingleSlideS_A(self):
         p = Parser(StringIO(singleSlideS_A))
         qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
@@ -438,7 +438,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(qs[1], 'Q: Question-1\nQ: Question-2\nA: Answer-1\nA: Answer-2')
         self.assertEqual(q[1], 'Question-1\nQuestion-2')
         self.assertEqual(a[1], 'Answer-1\nAnswer-2')
-    
+
     def testEmptyLineQAndA(self):
         p = Parser(StringIO(emptyLineQAndA))
         qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
