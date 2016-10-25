@@ -2,6 +2,7 @@ import unittest
 import re
 from io import StringIO
 from collections import namedtuple
+import cgi
         
 QAndAParsing = namedtuple('QAndAParsing',
                           ['fullNotes',
@@ -74,25 +75,25 @@ class Parser:
                     slideAFBSList[slideNum] = []
                     slideSFBAList[slideNum] = []
 
-                slideQList[slideNum].append(lineMatch.group('line'))
+                slideQList[slideNum].append(cgi.escape(lineMatch.group('line')))
 
                 if questionWithoutSlideLineMatch is not None:
-                    slideQWSList[slideNum].append(questionWithoutSlideLineMatch.group('line'))
+                    slideQWSList[slideNum].append(cgi.escape(questionWithoutSlideLineMatch.group('line')))
                 
                 if questionFollowedBySlideLineMatch is not None:
-                    slideQFBSList[slideNum].append(questionFollowedBySlideLineMatch.group('line'))
+                    slideQFBSList[slideNum].append(cgi.escape(questionFollowedBySlideLineMatch.group('line')))
                 
                 if slideFollowedByQuestionLineMatch is not None:
-                    slideSFBQList[slideNum].append(slideFollowedByQuestionLineMatch.group('line'))
+                    slideSFBQList[slideNum].append(cgi.escape(slideFollowedByQuestionLineMatch.group('line')))
 
                 if answerWithoutSlideLineMatch is not None:
-                    slideAWSList[slideNum].append(answerWithoutSlideLineMatch.group('line'))
+                    slideAWSList[slideNum].append(cgi.escape(answerWithoutSlideLineMatch.group('line')))
                 
                 if answerFollowedBySlideLineMatch is not None:
-                    slideAFBSList[slideNum].append(answerFollowedBySlideLineMatch.group('line'))
+                    slideAFBSList[slideNum].append(cgi.escape(answerFollowedBySlideLineMatch.group('line')))
                 
                 if slideFollowedByAnswerLineMatch is not None:
-                    slideSFBAList[slideNum].append(slideFollowedByAnswerLineMatch.group('line'))
+                    slideSFBAList[slideNum].append(cgi.escape(slideFollowedByAnswerLineMatch.group('line')))
 
             else:
                 slideNumMatch = self.slideNumberLine.match(line)
@@ -110,7 +111,7 @@ class Parser:
         self.slideSlidesFollowedByAnswers = self.listToDict(slideSFBAList)
 
     def listToDict(self, x):
-        return dict((k, '\n'.join(v)) for k, v in x.items())    
+        return dict((k, '<br><br>'.join(v)) for k, v in x.items())    
 
     def getQuestions(self):
         """Gets a dictionary of questions."""
