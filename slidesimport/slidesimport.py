@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pdfpages import PdfPages
-from parser import Parser, ParseException, QAndAParsing
+from parser import Parser, ParseException, NotesParsing
 
 import sys
 import os
@@ -87,7 +87,7 @@ def run(rawArgs=None):
     print "Reading files ..."
     try:
         notesFilePath = os.path.expandvars(os.path.expanduser(args.notes))
-        notes = Parser(file(notesFilePath, 'r')).getQAndAParsing()
+        notes = Parser(file(notesFilePath, 'r')).getNotesParsing()
         pdfPages = PdfPages(os.path.expandvars(os.path.expanduser(args.slides)))
     except IOError as e:
         print >> sys.stderr, "Error while reading source files: "

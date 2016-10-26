@@ -4,7 +4,7 @@ from io import StringIO
 from collections import namedtuple
 import cgi
         
-QAndAParsing = namedtuple('QAndAParsing',
+NotesParsing = namedtuple('NotesParsing',
                           ['fullNotes',
                            'questionsWithoutSlides',
                            'questionsFollowedBySlides',
@@ -24,7 +24,7 @@ class ParseException(BaseException):
 
 class Parser:
     slideNumberLine = re.compile(r'^(#.*)?Slide (?P<slideNum>\d+):')
-    questionLine = re.compile(r'^\s+(?P<line>.*)$')
+    fullNotes = re.compile(r'^\s+(?P<line>.*)$')
     questionWithoutSlideLine = re.compile(r'^\s+Q:\s*(?P<line>.*)$')
     questionFollowedBySlideLine = re.compile(r'^\s+Q_S:\s*(?P<line>.*)$')
     slideFollowedByQuestionLine = re.compile(r'^\s+S_Q:\s*(?P<line>.*)$')
@@ -49,7 +49,7 @@ class Parser:
                 continue
 
             if slideNum is not None:
-                lineMatch = self.questionLine.match(line)
+                lineMatch = self.fullNotes.match(line)
                 questionWithoutSlideLineMatch = self.questionWithoutSlideLine.match(line)
                 questionFollowedBySlideLineMatch = self.questionFollowedBySlideLine.match(line)
                 slideFollowedByQuestionLineMatch = self.slideFollowedByQuestionLine.match(line)
@@ -117,10 +117,10 @@ class Parser:
         """Gets a dictionary of questions."""
         return self.slideQuestions
     
-    def getQAndAParsing(self):
+    def getNotesParsing(self):
         """Gets dictionaries of various question and answer parsings."""
     
-        qAndAParsing = QAndAParsing(self.slideQuestions,
+        qAndAParsing = NotesParsing(self.slideQuestions,
                                     self.slideQuestionsWithoutSlides,
                                     self.slideQuestionsFollowedBySlides,
                                     self.slideSlidesFollowedByQuestions,
@@ -292,7 +292,7 @@ class TestParser(unittest.TestCase):
     
     def testSingleSlideQ(self):
         p = Parser(StringIO(singleSlideQ))
-        qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
+        qs, q, q_s, s_q, a, a_s, s_a = p.getNotesParsing()
 
         self.assertEqual(len(qs), 1)
         self.assertEqual(len(q), 1)
@@ -311,7 +311,7 @@ class TestParser(unittest.TestCase):
     
     def testSingleSlideQ_S(self):
         p = Parser(StringIO(singleSlideQ_S))
-        qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
+        qs, q, q_s, s_q, a, a_s, s_a = p.getNotesParsing()
 
         self.assertEqual(len(qs), 1)
         self.assertEqual(len(q), 1)
@@ -330,7 +330,7 @@ class TestParser(unittest.TestCase):
     
     def testSingleSlideS_Q(self):
         p = Parser(StringIO(singleSlideS_Q))
-        qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
+        qs, q, q_s, s_q, a, a_s, s_a = p.getNotesParsing()
 
         self.assertEqual(len(qs), 1)
         self.assertEqual(len(q), 1)
@@ -349,7 +349,7 @@ class TestParser(unittest.TestCase):
     
     def testSingleSlideA(self):
         p = Parser(StringIO(singleSlideA))
-        qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
+        qs, q, q_s, s_q, a, a_s, s_a = p.getNotesParsing()
 
         self.assertEqual(len(qs), 1)
         self.assertEqual(len(q), 1)
@@ -368,7 +368,7 @@ class TestParser(unittest.TestCase):
     
     def testSingleSlideA_S(self):
         p = Parser(StringIO(singleSlideA_S))
-        qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
+        qs, q, q_s, s_q, a, a_s, s_a = p.getNotesParsing()
 
         self.assertEqual(len(qs), 1)
         self.assertEqual(len(q), 1)
@@ -387,7 +387,7 @@ class TestParser(unittest.TestCase):
     
     def testSingleSlideS_A(self):
         p = Parser(StringIO(singleSlideS_A))
-        qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
+        qs, q, q_s, s_q, a, a_s, s_a = p.getNotesParsing()
 
         self.assertEqual(len(qs), 1)
         self.assertEqual(len(q), 1)
@@ -406,7 +406,7 @@ class TestParser(unittest.TestCase):
 
     def testSingleSlideQAndA(self):
         p = Parser(StringIO(singleSlideQAndA))
-        qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
+        qs, q, q_s, s_q, a, a_s, s_a = p.getNotesParsing()
 
         self.assertEqual(len(qs), 1)
         self.assertEqual(len(q), 1)
@@ -417,7 +417,7 @@ class TestParser(unittest.TestCase):
 
     def testMultipleSlideQAndA(self):
         p = Parser(StringIO(multipleSlideQAndA))
-        qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
+        qs, q, q_s, s_q, a, a_s, s_a = p.getNotesParsing()
 
         self.assertEqual(len(qs), 2)
         self.assertEqual(len(q), 2)
@@ -431,7 +431,7 @@ class TestParser(unittest.TestCase):
 
     def testMultiLineeQAndA(self):
         p = Parser(StringIO(multiLineQAndA))
-        qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
+        qs, q, q_s, s_q, a, a_s, s_a = p.getNotesParsing()
 
         self.assertEqual(len(qs), 1)
         self.assertEqual(len(q), 1)
@@ -442,7 +442,7 @@ class TestParser(unittest.TestCase):
     
     def testEmptyLineQAndA(self):
         p = Parser(StringIO(emptyLineQAndA))
-        qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
+        qs, q, q_s, s_q, a, a_s, s_a = p.getNotesParsing()
 
         self.assertEqual(len(qs), 2)
         self.assertEqual(len(q), 2)
@@ -456,7 +456,7 @@ class TestParser(unittest.TestCase):
 
     def testMultipleSlideMentionsQAndA(self):
         p = Parser(StringIO(multipleSlideMentionsQAndA))
-        qs, q, q_s, s_q, a, a_s, s_a = p.getQAndAParsing()
+        qs, q, q_s, s_q, a, a_s, s_a = p.getNotesParsing()
 
         self.assertEqual(len(qs), 2)
         self.assertEqual(len(q), 2)
