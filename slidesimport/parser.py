@@ -98,10 +98,10 @@ class Parser:
 
                 slideQList[slideNum].append(cgi.escape(lineMatch.group('line')))
 
-                questionFollowedBySlideCropParsing = ''
-                slideFollowedByQuestionCropParsing = ''
-                answerFollowedBySlideCropParsing = ''
-                slideFollowedByAnswerCropParsing = ''
+                questionFollowedBySlideCropParsing = []
+                slideFollowedByQuestionCropParsing = []
+                answerFollowedBySlideCropParsing = []
+                slideFollowedByAnswerCropParsing = []
 
                 if questionWithoutSlideLineMatch is not None:
                     slideQWSList[slideNum].append(cgi.escape(questionWithoutSlideLineMatch.group('line')))
@@ -137,10 +137,15 @@ class Parser:
                     if slideFollowedByAnswerCropString is not None:
                         slideFollowedByAnswerCropParsing = self.parseCrop(slideFollowedByAnswerCropString)
 
-                slideQFBSCropList[slideNum].append(questionFollowedBySlideCropParsing)
-                slideSFBQCropList[slideNum].append(slideFollowedByQuestionCropParsing)
-                slideAFBSCropList[slideNum].append(answerFollowedBySlideCropParsing)
-                slideSFBACropList[slideNum].append(slideFollowedByAnswerCropParsing)
+                # For now, just to get this working, we are not appending to the crop values
+                # list for the slide, but just assigning it to whatever the last input crop values were.
+                # It might be best to do things this way anyway, because in the current incarnation
+                # of system, we're only able to use one slide anyway, so having multiple
+                # crop values is pointless.
+                slideQFBSCropList[slideNum] = questionFollowedBySlideCropParsing
+                slideSFBQCropList[slideNum] = slideFollowedByQuestionCropParsing
+                slideAFBSCropList[slideNum] = answerFollowedBySlideCropParsing
+                slideSFBACropList[slideNum] = slideFollowedByAnswerCropParsing
 
             else:
                 slideNumMatch = self.slideNumberLine.match(line)
@@ -152,7 +157,6 @@ class Parser:
         self.fullNotes = self.dictOfListsToDict(slideQList)
         self.slideQuestionsWithoutSlides = self.dictOfListsToDict(slideQWSList)
         self.slideQuestionsFollowedBySlides = self.dictOfListsToDict(slideQFBSList)
-        from nose.tools import set_trace; set_trace()
         self.slideQuestionsFollowedBySlidesCrops = dict(slideQFBSCropList)
         self.slideSlidesFollowedByQuestions = self.dictOfListsToDict(slideSFBQList)
         self.slideSlidesFollowedByQuestionsCrops = dict(slideSFBQCropList)
@@ -180,6 +184,14 @@ class Parser:
             wmax = int(cropStringNumParsing.group('wmax'))
             hmin = int(cropStringNumParsing.group('hmin'))
             hmax = int(cropStringNumParsing.group('hmax'))
+
+            # Some error checking
+            if wmax <= wmin:
+                wmin = 0
+                wmax = 100
+            if hmax <= hmin:
+                hmin = 0
+                hmax = 100
 
             cropNumList = [[wmin, wmax], [hmin, hmax]]
 
@@ -601,12 +613,12 @@ class TestParser(unittest.TestCase):
         self.assertEqual(q_s[1], 'Question')
         self.assertEqual(q_s_c[1], [[0, 50], [50,100]])
         self.assertEqual(s_q[1], '')
-        self.assertEqual(s_q_c[1], '')
+        self.assertEqual(s_q_c[1], [])
         self.assertEqual(a[1], '')
         self.assertEqual(a_s[1], '')
-        self.assertEqual(a_s_c[1], '')
+        self.assertEqual(a_s_c[1], [])
         self.assertEqual(s_a[1], '')
-        self.assertEqual(s_a_c[1], '')
+        self.assertEqual(s_a_c[1], [])
 
     def testSingleSlideS_QCrop(self):
         p = Parser(StringIO(singleSlideS_QCrop))
@@ -626,14 +638,14 @@ class TestParser(unittest.TestCase):
         self.assertEqual(n[1], 'S_Q[25-50,50-75]: Question')
         self.assertEqual(q[1], '')
         self.assertEqual(q_s[1], '')
-        self.assertEqual(q_s_c[1], '')
+        self.assertEqual(q_s_c[1], [])
         self.assertEqual(s_q[1], 'Question')
         self.assertEqual(s_q_c[1], [[25,50], [50,75]])
         self.assertEqual(a[1], '')
         self.assertEqual(a_s[1], '')
-        self.assertEqual(a_s_c[1], '')
+        self.assertEqual(a_s_c[1], [])
         self.assertEqual(s_a[1], '')
-        self.assertEqual(s_a_c[1], '')
+        self.assertEqual(s_a_c[1], [])
 
     def testSingleSlideA_SCrop(self):
         p = Parser(StringIO(singleSlideA_SCrop))
@@ -653,14 +665,14 @@ class TestParser(unittest.TestCase):
         self.assertEqual(n[1], 'A_S[10-40,10:100]: Answer')
         self.assertEqual(q[1], '')
         self.assertEqual(q_s[1], '')
-        self.assertEqual(q_s_c[1], '')
+        self.assertEqual(q_s_c[1], [])
         self.assertEqual(s_q[1], '')
-        self.assertEqual(s_q_c[1], '')
+        self.assertEqual(s_q_c[1], [])
         self.assertEqual(a[1], '')
         self.assertEqual(a_s[1], 'Answer')
         self.assertEqual(a_s_c[1], [[10,40], [10,100]])
         self.assertEqual(s_a[1], '')
-        self.assertEqual(s_a_c[1], '')
+        self.assertEqual(s_a_c[1], [])
 
     def testSingleSlideS_ACrop(self):
         p = Parser(StringIO(singleSlideS_ACrop))
@@ -680,12 +692,12 @@ class TestParser(unittest.TestCase):
         self.assertEqual(n[1], 'S_A[0:100,0-10]: Answer')
         self.assertEqual(q[1], '')
         self.assertEqual(q_s[1], '')
-        self.assertEqual(q_s_c[1], '')
+        self.assertEqual(q_s_c[1], [])
         self.assertEqual(s_q[1], '')
-        self.assertEqual(s_q_c[1], '')
+        self.assertEqual(s_q_c[1], [])
         self.assertEqual(a[1], '')
         self.assertEqual(a_s[1], '')
-        self.assertEqual(a_s_c[1], '')
+        self.assertEqual(a_s_c[1], [])
         self.assertEqual(s_a[1], 'Answer')
         self.assertEqual(s_a_c[1], [[0,100], [0,10]])
 
@@ -709,12 +721,12 @@ class TestParser(unittest.TestCase):
         self.assertEqual(q_s[1], 'Question')
         self.assertEqual(q_s_c[1], [[0, 100], [0,100]])
         self.assertEqual(s_q[1], '')
-        self.assertEqual(s_q_c[1], '')
+        self.assertEqual(s_q_c[1], [])
         self.assertEqual(a[1], '')
         self.assertEqual(a_s[1], '')
-        self.assertEqual(a_s_c[1], '')
+        self.assertEqual(a_s_c[1], [])
         self.assertEqual(s_a[1], '')
-        self.assertEqual(s_a_c[1], '')
+        self.assertEqual(s_a_c[1], [])
 
     def testSingleSlideA_SCropBadValues(self):
         p = Parser(StringIO(singleSlideA_SCropBadValues))
@@ -734,11 +746,11 @@ class TestParser(unittest.TestCase):
         self.assertEqual(n[1], 'A_S[0:0,100:100]: Answer')
         self.assertEqual(q[1], '')
         self.assertEqual(q_s[1], '')
-        self.assertEqual(q_s_c[1], '')
+        self.assertEqual(q_s_c[1], [])
         self.assertEqual(s_q[1], '')
-        self.assertEqual(s_q_c[1], '')
+        self.assertEqual(s_q_c[1], [])
         self.assertEqual(a[1], '')
         self.assertEqual(a_s[1], 'Answer')
         self.assertEqual(a_s_c[1], [[0,100], [0,100]])
         self.assertEqual(s_a[1], '')
-        self.assertEqual(s_a_c[1], '')
+        self.assertEqual(s_a_c[1], [])
