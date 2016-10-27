@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pdfpages import PdfPages
-from parser import Parser, ParseException, NotesParsing
+from parser import Parser, ParseException, NotesAndCropsParsing
 
 import sys
 import os
@@ -87,7 +87,7 @@ def run(rawArgs=None):
     print "Reading files ..."
     try:
         notesFilePath = os.path.expandvars(os.path.expanduser(args.notes))
-        notes = Parser(file(notesFilePath, 'r')).getNotesParsing()
+        notes = Parser(file(notesFilePath, 'r')).getNotesAndCropsParsing()
         pdfPages = PdfPages(os.path.expandvars(os.path.expanduser(args.slides)))
     except IOError as e:
         print >> sys.stderr, "Error while reading source files: "
@@ -127,6 +127,7 @@ def run(rawArgs=None):
         mediaFileName = getMediaName(prefix, slideNum)
 
         outputString = ''
+        cropPercentValues = [[0,100], [0,100]]
 
         # If the "question without slide" dict entry is not empty, write that
         if notes.questionsWithoutSlides[slideNum] != '':
@@ -134,9 +135,13 @@ def run(rawArgs=None):
         # Otherwise try "question followed by slide"
         elif notes.questionsFollowedBySlides[slideNum] != '':
             outputString += '<div>{0}</div><img src="{1}" />; '.format(notes.questionsFollowedBySlides[slideNum], mediaFileName)
+            if notes.questionsFollowedBySlidesCrops[slideNum] != []:
+                cropPercentValues = notes.questionsFollowedBySlidesCrops[slideNum]
         # Otherwise try "slide followed by question"
         elif notes.slidesFollowedByQuestions[slideNum] != '':
             outputString += '<img src="{0}" /><div>{1}</div>; '.format(mediaFileName, notes.slidesFollowedByQuestions[slideNum])
+            if notes.slidesFollowedByQuestionsCrops[slideNum] != []:
+                cropPercentValues = notes.slidesFollowedByQuestionsCrops[slideNum]
         # Otherwise fall back to default behaviour
         else:
             outputString += '"{0}"; '.format(qs)
@@ -147,13 +152,17 @@ def run(rawArgs=None):
         # Otherwise try "answer followed by slide"
         elif notes.answersFollowedBySlides[slideNum] != '':
             outputString += '<div>{0}</div><img src="{1}" />\n'.format(notes.answersFollowedBySlides[slideNum], mediaFileName)
+            if notes.answersFollowedBySlidesCrops[slideNum] != []:
+                cropPercentValues = notes.answersFollowedBySlidesCrops[slideNum]
         # Otherwise try "slide followed by answer"
         elif notes.slidesFollowedByAnswers[slideNum] != '':
             outputString += '<img src="{0}" /><div>{1}</div>\n'.format(mediaFileName, notes.slidesFollowedByAnswers[slideNum])
+            if notes.slidesFollowedByAnswersCrops[slideNum] != []:
+                cropPercentValues = notes.slidesFollowedByAnswersCrops[slideNum]
         # Otherwise fall back to default behaviour
         else:
             outputString += '<img src="{0}" />\n'.format(mediaFileName)
-        
+
         # Write output
         outputDeckFile.write(outputString)
-        pdfPages.getPageAsPng(slideNum).save(filename=mediaFilePath)
+        pdfPages.getCroppedPageAsPng(slideNum, cropPercentValues).save(filename=mediaFilePath)

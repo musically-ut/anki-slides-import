@@ -38,3 +38,8 @@ Slide 30:
     Q_S: Is this a Japanese or Italian meal?
 
     A: Good question!
+
+Slide 31:
+    Q_S[0-100, 50-100]: Can we crop this slide?
+
+    A: Yes we can!
