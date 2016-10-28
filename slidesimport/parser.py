@@ -443,9 +443,14 @@ singleSlideA_SCropBadValues = u'''Slide 1:
     A_S[0:0,100:100]: Answer
 '''
 
-singleSlideQ_SAndA_SCrop = u'''Slide 1:
+singleSlideQ_SAndA_SNumericalCrop = u'''Slide 1:
     Q_S[0-25, 25-50]: Question
     A_S[50-75, 75-100]: Answer
+'''
+
+singleSlideS_QAndS_AAlphabeticalCrop = u'''Slide 1:
+    S_Q[t]: Question
+    S_A[b]: Answer
 '''
 
 class TestParser(unittest.TestCase):
@@ -831,8 +836,8 @@ class TestParser(unittest.TestCase):
         self.assertEqual(s_a[1], '')
         self.assertEqual(s_a_c[1], [])
 
-    def testSingleSlideQ_SAndA_SCrop(self):
-        p = Parser(StringIO(singleSlideQ_SAndA_SCrop))
+    def testSingleSlideQ_SAndA_SNumericalCrop(self):
+        p = Parser(StringIO(singleSlideQ_SAndA_SNumericalCrop))
         n, q, q_s, q_s_c, s_q, s_q_c, a, a_s, a_s_c, s_a, s_a_c = p.getNotesAndCropsParsing()
 
         self.assertEqual(len(n), 1)
@@ -857,3 +862,31 @@ class TestParser(unittest.TestCase):
         self.assertEqual(a_s_c[1], [[50,75], [75,100]])
         self.assertEqual(s_a[1], '')
         self.assertEqual(s_a_c[1], [])
+
+    def testSingleSlideS_QAndS_AAlphabeticalCrop(self):
+        p = Parser(StringIO(singleSlideS_QAndS_AAlphabeticalCrop))
+        n, q, q_s, q_s_c, s_q, s_q_c, a, a_s, a_s_c, s_a, s_a_c = p.getNotesAndCropsParsing()
+
+        self.assertEqual(len(n), 1)
+        self.assertEqual(len(q), 1)
+        self.assertEqual(len(q_s), 1)
+        self.assertEqual(len(q_s_c), 1)
+        self.assertEqual(len(s_q), 1)
+        self.assertEqual(len(s_q_c), 1)
+        self.assertEqual(len(a), 1)
+        self.assertEqual(len(a_s), 1)
+        self.assertEqual(len(a_s_c), 1)
+        self.assertEqual(len(s_a), 1)
+        self.assertEqual(len(s_a_c), 1)
+        self.assertEqual(n[1], 'S_Q[t]: Question<br><br>S_A[b]: Answer')
+        self.assertEqual(q[1], '')
+        self.assertEqual(q_s[1], '')
+        self.assertEqual(q_s_c[1], [])
+        self.assertEqual(s_q[1], 'Question')
+        self.assertEqual(s_q_c[1], [[0,100], [0, 50]])
+        self.assertEqual(a[1], '')
+        self.assertEqual(a_s[1], '')
+        self.assertEqual(a_s_c[1], [])
+        self.assertEqual(s_a[1], 'Answer')
+        self.assertEqual(s_a_c[1], [[0,100], [50,100]])
+
