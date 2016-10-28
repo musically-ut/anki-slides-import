@@ -137,7 +137,7 @@ class Parser:
                     if slideFollowedByAnswerCropString is not None:
                         slideFollowedByAnswerCropParsing = self.parseCrop(slideFollowedByAnswerCropString)
 
-                # For now, just to get this working, unlike with the notes/questions
+                # For now, just to get this working, unlike with the notes/questions/answers lists,
                 # we are not appending to the crop values list for the slide,
                 # but just assigning it to whatever the last input crop values were.
                 # It might be best to do things this way anyway, because in the current incarnation
@@ -180,10 +180,76 @@ class Parser:
 
         cropStringNumParser = re.compile(r'^\s*(?P<wmin>\d.*)[-|:](?P<wmax>\d.*),\s*(?P<hmin>\d.*)[-|:](?P<hmax>\d.*)\s*')
         cropStringNumParsing = cropStringNumParser.match(cropString)
+        cropStringAlphaParser = re.compile(r'^\s*(?P<code>[a-zA-Z].*)\s*')
+        cropStringAlphaParsing = cropStringAlphaParser.match(cropString)
 
+        # First check if we're dealing with numerical values
         if cropStringNumParsing is None:
-            # If we can't parse the string, return crop percentage numbers that encapsulate the entire slide image.
-            cropNumList = [[0,100], [0,100]]
+            # If not, check if we're dealing with alphabetic codes, e.g. 'tl' for 'top-left', etc.
+            if cropStringAlphaParsing is None:
+                # If we can't parse the string, return crop percentage values that encapsulate the entire slide image.
+                cropNumList = [[0,100], [0,100]]
+            else:
+                code = cropStringAlphaParsing.group('code').lower()
+
+                # 'All' of the slide, or the 'whole' of the slide
+                if code == 'a' or code == 'w':
+                    cropNumList = [[0, 100], [0, 100]]
+                # 'Top' or 'top half' of the slide
+                elif code == 't' or code == 'th':
+                    cropNumList = [[0, 100], [0, 50]]
+                # 'vertical middle half' of the slide
+                elif code == 'vmh':
+                    cropNumList = [[0, 100], [25, 75]]
+                # 'Bottom' or 'bottom half' of the slide
+                elif code == 'b' or code == 'bh':
+                    cropNumList = [[0, 100], [50, 100]]
+                # 'Left' or 'left half' of the slide
+                elif code == 'l' or code == 'lh':
+                    cropNumList = [[0, 50], [0, 100]]
+                # 'middle half' or 'horizontal middle half' of the slide
+                elif code == 'mh' or code == 'hmh':
+                    cropNumList = [[25, 75], [0, 100]]
+                # 'Right' or 'right half' of the slide
+                elif code == 'r' or code == 'rh':
+                    cropNumList = [[50, 100], [0, 100]]
+                # 'middle' or 'centre' or 'middle quarter' or 'centre quarter' of the slide
+                elif code == 'm' or code == 'c' or code == 'mq' or code == 'cq':
+                    cropNumList = [[25, 75], [25, 75]]
+                # 'Top-left' or 'top-left quarter' of the slide
+                elif code == 'tl' or code == 'tlq':
+                    cropNumList = [[0, 50], [0, 50]]
+                # 'Top-right' or 'top-right quarter' of the slide
+                elif code == 'tr' or code == 'trq':
+                    cropNumList = [[50, 100], [0, 50]]
+                # 'Bottom-left' or 'bottom-left quarter' of the slide
+                elif code == 'bl' or code == 'blq':
+                    cropNumList = [[0, 50], [50, 100]]
+                # 'Bottom-right' or 'bottom-right quarter' of the slide
+                elif code == 'br' or code == 'brq':
+                    cropNumList = [[50, 100], [50, 100]]
+                # 'Top third' of the slide
+                elif code == 'tt':
+                    cropNumList = [[0, 100], [0, 33]]
+                # 'Vertical middle third' of the slide
+                elif code == 'vmt':
+                    cropNumList = [[0, 100], [33, 66]]
+                # 'Bottom third' of the slide
+                elif code == 'bt':
+                    cropNumList = [[0, 100], [66, 100]]
+                # 'Left third' of the slide
+                elif code == 'lt':
+                    cropNumList = [[0, 33], [0, 100]]
+                # 'middle third' or 'horizontal middle third' of the slide
+                elif code == 'mt' or code == 'hmt':
+                    cropNumList = [[33, 66], [0, 100]]
+                # 'right third' of the slide
+                elif code == 'rt':
+                    cropNumList = [[66, 100], [0, 100]]
+                # Fall back to default values
+                else:
+                    cropNumList = [[0,100], [0,100]]
+
         else:
             wmin = int(cropStringNumParsing.group('wmin'))
             wmax = int(cropStringNumParsing.group('wmax'))

@@ -42,4 +42,4 @@ Slide 30:
 Slide 31:
     Q_S[0-100, 0-50]: Can we crop this slide?
 
-    A_S[0-100, 50-100]: Yes we can!
+    A_S[b]: Yes we can! And not just with numerical codes, but also with alphabetical codes like 'b' or 'bh' for 'bottom-half' :)

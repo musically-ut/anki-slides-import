@@ -178,20 +178,10 @@ def run(rawArgs=None):
         # Write deck file output
         outputDeckFile.write(outputString)
         
-        # print "notes.questionsFollowedBySlidesCrops:"
-        # print notes.questionsFollowedBySlidesCrops
-
-        # print "notes.answersFollowedBySlidesCrops:"
-        # print notes.answersFollowedBySlidesCrops
-        
         # Save question slide if necessary
         if questionMediaFilePath != '':
-            # print "questionCropPercentValues:"
-            # print questionCropPercentValues
             pdfPages.getCroppedPageAsPng(slideNum, questionCropPercentValues).save(filename=questionMediaFilePath)
 
         # Save answer slide if necessary
         if answerMediaFilePath != '':
-            # print "answerCropPercentValues:"
-            # print answerCropPercentValues
             pdfPages.getCroppedPageAsPng(slideNum, answerCropPercentValues).save(filename=answerMediaFilePath)
