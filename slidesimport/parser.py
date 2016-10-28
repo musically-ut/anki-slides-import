@@ -173,7 +173,7 @@ class Parser:
 
     def dictOfListsToDict(self, x):
         """Converts a dict of lists of strings to a dict of strings separated by HTML line breaks."""
-        return dict((k, '<br><br>'.join(v)) for k, v in x.items())    
+        return {k: '<br><br>'.join(v) for k, v in x.items()}
 
     def parseCrop(self, cropString):
         """Parses a slide crop string to a list of crop percentage numbers formatted as [[wmin, wmax], [hmin, hmax]]."""
