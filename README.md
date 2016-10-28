@@ -29,13 +29,13 @@ to:
 
 The deck should be ready to use.
 
-### Anki Card Modifiers
+### Slide Modifiers
 
-The [`test/example_notes_q_and_a.txt`](https://github.com/barryridge/anki-slides-import/blob/master/test/example_notes_q_and_a.txt) file provides examples of how to use Anki card modifiers to alter the behaviour of Anki card generation and slide insertion.  The available slide modifiers come in two varieties that allow for either positional control or slide cropping respectively, and are listed as follows:
+The [`test/example_notes_q_and_a.txt`](https://github.com/barryridge/anki-slides-import/blob/master/test/example_notes_q_and_a.txt) file provides examples of how to use slide modifiers to alter the behaviour of Anki card generation and slide insertion.  The available slide modifiers come in two varieties that allow for various forms of either slide insertion or slide cropping respectively, and are listed as follows:
 
-#### Positional Control
+#### Slide Insertion
 
-  * `Q: ` - Include the succeeding text as a standalone question without a slide (default behaviour without card modifiers).
+  * `Q: ` - Include the succeeding text as a standalone question without a slide (default behaviour without slide modifiers).
   * `Q_S: ` - Include the succeeding text as a question followed by the current slide.
   * `S_Q: ` - Include the current slide followed by the succeeding text as a question.
   * `A: ` - Include the succeeding text as a standalone answer without a slide.
@@ -46,7 +46,7 @@ The [`test/example_notes_q_and_a.txt`](https://github.com/barryridge/anki-slides
 
 ##### Cropping with alphabetical codes
 
-  This is probably the most convenient way to crop slides.  Four of the above positional control modifiers, `Q_S: `, `S_Q: `, `A_S: ` and `S_A: `, can be amended by including codes in square brackets before the colon, like `t`, for `top`, that would crop the top half of the slide, e.g. `Q_S[t]: `.  The full list of possible alphabetical cropping codes are as follows:
+  This is probably the most convenient way to crop slides.  Four of the above slide insertion modifiers, `Q_S: `, `S_Q: `, `A_S: ` and `S_A: `, can be amended by including codes in square brackets before the colon, like `t` for "top", that would crop the top half of the slide, e.g. `Q_S[t]: `.  The full list of possible alphabetical cropping codes are as follows:
 
   * `a` or `w` - 'All' of the slide, or the 'whole' of the slide (Numerical: `[[0, 100], [0, 100]]`).
   * `t` or `th` - 'Top' or 'top half' of the slide (Numerical: `[[0, 100], [0, 50]]`).
@@ -69,7 +69,7 @@ The [`test/example_notes_q_and_a.txt`](https://github.com/barryridge/anki-slides
 
 ##### Cropping with numerical values
 
-  Alternatively, for finer control, the cropping values may be specified numerically as percentages, by amending the positional control codes with `[[wmin, wmax], [hmin, hmax]]` codes before the colon, e.g. `A_S[[25,75], [0, 100]]: `.
+  Alternatively, for finer control, the cropping values may be specified numerically as percentages, by amending the slide insertion codes with `[[wmin, wmax], [hmin, hmax]]` codes before the colon, e.g. `A_S[[25,75], [0, 100]]: `.
 
 ### Dependencies 
 
