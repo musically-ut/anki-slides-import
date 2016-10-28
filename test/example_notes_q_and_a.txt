@@ -40,6 +40,6 @@ Slide 30:
     A: Good question!
 
 Slide 31:
-    Q_S[0-100, 50-100]: Can we crop this slide?
+    Q_S[0-100, 0-50]: Can we crop this slide?
 
-    A: Yes we can!
+    A_S[0-100, 50-100]: Yes we can!
