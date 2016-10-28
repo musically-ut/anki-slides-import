@@ -48,28 +48,28 @@ The [`test/example_notes_q_and_a.txt`](https://github.com/barryridge/anki-slides
 
   This is probably the most convenient way to crop slides.  Four of the above slide insertion modifiers, `Q_S: `, `S_Q: `, `A_S: ` and `S_A: `, can be amended by including codes in square brackets before the colon, like `t` for "top", that would crop the top half of the slide, e.g. `Q_S[t]: `.  The full list of possible alphabetical cropping codes are as follows:
 
-  * `a` or `w` - 'All' of the slide, or the 'whole' of the slide (Numerical: `[[0, 100], [0, 100]]`).
-  * `t` or `th` - 'Top' or 'top half' of the slide (Numerical: `[[0, 100], [0, 50]]`).
-  * `vmh` - 'Vertical middle half' of the slide (Numerical: `[[0, 100], [25, 75]]`).
-  * `b` or `bh` - 'Bottom' or 'bottom half' of the slide (Numerical: `[[0, 100], [50, 100]]`).
-  * `l` or `lh` - 'Left' or 'left half' of the slide (Numerical: `[[0, 50], [0, 100]]`).
-  * `mh` or `hmh` - 'Middle half' or 'horizontal middle half' of the slide (Numerical `[[25, 75], [0, 100]]`).
-  * `r` or `rh` - 'Right' or 'right half' of the slide (Numerical: `[[50, 100], [0, 100]]`).
-  * `m` or `c` or `mq` or `cq` - 'Middle' or 'centre' or 'middle quarter' or 'centre quarter' of the slide (Numerical: `[[25, 75], [25, 75]]`).
-  * `tl` or `tlq` - 'Top-left' or 'top-left quarter' of the slide (Numerical: `[[0, 50], [0, 50]]`).
-  * `tr` or `trq` - 'Top-right' or 'top-right quarter' of the slide (Numerical: `[[50, 100], [0, 50]]`).
-  * `bl` or `blq` - 'Bottom-left' or 'bottom-left quarter' of the slide (Numerical: `[[0, 50], [50, 100]]`).
-  * `br` or `brq` - 'Bottom-right' or 'bottom-right quarter' of the slide (Numerical: `[[50, 100], [50, 100]]`).
-  * `tt` - 'Top third' of the slide (Numerical: `[[0, 100], [0, 33]]`).
-  * `vmt` - 'Vertical middle third' of the slide (Numerical: `[[0, 100], [33, 66]]`).
-  * `bt` - 'Bottom third' of the slide (Numerical: `[[0, 100], [66, 100]]`).
-  * `lt` - 'Left third' of the slide (Numerical: `[[0, 33], [0, 100]]`).
-  * `mt` or `hmt` - 'Middle third' or 'horizontal middle third' of the slide (Numerical: `[[33, 66], [0, 100]]`).
-  * `rt` - 'Right third' of the slide (Numerical: `[[66, 100], [0, 100]]`).
+  * `a` or `w` - 'All' of the slide, or the 'whole' of the slide (Numerical: `[[0:100], [0:100]]`).
+  * `t` or `th` - 'Top' or 'top half' of the slide (Numerical: `[[0:100], [0:50]]`).
+  * `vmh` - 'Vertical middle half' of the slide (Numerical: `[[0:100], [25:75]]`).
+  * `b` or `bh` - 'Bottom' or 'bottom half' of the slide (Numerical: `[[0:100], [50:100]]`).
+  * `l` or `lh` - 'Left' or 'left half' of the slide (Numerical: `[[0:50], [0:100]]`).
+  * `mh` or `hmh` - 'Middle half' or 'horizontal middle half' of the slide (Numerical `[[25:75], [0:100]]`).
+  * `r` or `rh` - 'Right' or 'right half' of the slide (Numerical: `[[50:100], [0:100]]`).
+  * `m` or `c` or `mq` or `cq` - 'Middle' or 'centre' or 'middle quarter' or 'centre quarter' of the slide (Numerical: `[[25:75], [25:75]]`).
+  * `tl` or `tlq` - 'Top-left' or 'top-left quarter' of the slide (Numerical: `[[0:50], [0:50]]`).
+  * `tr` or `trq` - 'Top-right' or 'top-right quarter' of the slide (Numerical: `[[50:100], [0:50]]`).
+  * `bl` or `blq` - 'Bottom-left' or 'bottom-left quarter' of the slide (Numerical: `[[0:50], [50:100]]`).
+  * `br` or `brq` - 'Bottom-right' or 'bottom-right quarter' of the slide (Numerical: `[[50:100], [50:100]]`).
+  * `tt` - 'Top third' of the slide (Numerical: `[[0:100], [0:33]]`).
+  * `vmt` - 'Vertical middle third' of the slide (Numerical: `[[0:100], [33:66]]`).
+  * `bt` - 'Bottom third' of the slide (Numerical: `[[0:100], [66:100]]`).
+  * `lt` - 'Left third' of the slide (Numerical: `[[0:33], [0:100]]`).
+  * `mt` or `hmt` - 'Middle third' or 'horizontal middle third' of the slide (Numerical: `[[33:66], [0:100]]`).
+  * `rt` - 'Right third' of the slide (Numerical: `[[66:100], [0:100]]`).
 
 ##### Cropping with numerical values
 
-  Alternatively, for finer control, the cropping values may be specified numerically as percentages, by amending the slide insertion codes with `[[wmin, wmax], [hmin, hmax]]` codes before the colon, e.g. `A_S[[25,75], [0, 100]]: `.
+  Alternatively, for finer control, the cropping values may be specified numerically as percentages, by amending the slide insertion codes with `[[wmin:wmax], [hmin:hmax]]` (or `[[wmin-wmax], [hmin-hmax]]`) codes before the colon, e.g. `A_S[[25:5], [0:100]]: ` (or `A_S[[25-5], [0-100]]: `).
 
 ### Dependencies 
 
