@@ -31,7 +31,7 @@ The deck should be ready to use.
 
 ### Slide Modifiers
 
-The [`test/example_notes_q_and_a.txt`](https://github.com/barryridge/anki-slides-import/blob/master/test/example_notes_q_and_a.txt) file provides examples of how to use slide modifiers to alter the behaviour of Anki card generation and slide insertion.  The available slide modifiers come in two varieties that allow for various forms of either slide insertion or slide cropping respectively, and are listed as follows:
+The [`test/example_notes_q_and_a.txt`](test/example_notes_q_and_a.txt) file provides examples of how to use slide modifiers to alter the behaviour of Anki card generation and slide insertion.  The available slide modifiers come in two varieties that allow for various forms of either slide insertion or slide cropping respectively, and are listed as follows:
 
 #### Slide Insertion
 
