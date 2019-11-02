@@ -23,9 +23,9 @@ to:
  1. Write your notes slide by slide in a [plain text file](https://github.com/musically-ut/anki-slides-import/blob/master/test/example_notes.txt). 
  2. Obtain the slides in pdf format.
  3. Run `slides2anki <notes.txt> <slides.pdf> <output.deck.name>`. 
-     - Currently, you need to add `-U "~/Documents/Anki/User 1"` to explicitly provide you [user profile folder](http://ankisrs.net/docs/manual.html#file-locations).
+     - Currently, you need to add `-U "~/Library/Application Support/Anki2/User 1/"` (or `-U "~/Documents/Anki/User 1"`) to explicitly provide you [user profile folder](http://ankisrs.net/docs/manual.html#file-locations).
      - If you cloned this repository, then replace `slides2anki` with `./slides_import.py` while in the repository root.
- 4. Open Anki and import the `<output.deck>` as a CSV file.
+ 4. Open Anki and import the `<output.deck.name>` as a CSV file.
 
 The deck should be ready to use.
 
