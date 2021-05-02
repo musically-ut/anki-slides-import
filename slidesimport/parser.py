@@ -2,7 +2,7 @@ import unittest
 import re
 from io import StringIO
 from collections import namedtuple
-import cgi
+import html
 
 NotesParsing = namedtuple('NotesParsing',
                           ['fullNotes',
@@ -96,7 +96,7 @@ class Parser:
                     slideSFBAList[slideNum] = []
                     slideSFBACropList[slideNum] = []
 
-                slideQList[slideNum].append(cgi.escape(lineMatch.group('line')))
+                slideQList[slideNum].append(html.escape(lineMatch.group('line')))
 
                 questionFollowedBySlideCropParsing = []
                 slideFollowedByQuestionCropParsing = []
@@ -104,34 +104,34 @@ class Parser:
                 slideFollowedByAnswerCropParsing = []
 
                 if questionWithoutSlideLineMatch is not None:
-                    slideQWSList[slideNum].append(cgi.escape(questionWithoutSlideLineMatch.group('line')))
+                    slideQWSList[slideNum].append(html.escape(questionWithoutSlideLineMatch.group('line')))
 
                 if questionFollowedBySlideLineMatch is not None:
-                    slideQFBSList[slideNum].append(cgi.escape(questionFollowedBySlideLineMatch.group('line')))
+                    slideQFBSList[slideNum].append(html.escape(questionFollowedBySlideLineMatch.group('line')))
 
                     questionFollowedBySlideCropString = questionFollowedBySlideLineMatch.group('crop')
                     if questionFollowedBySlideCropString is not None:
                         questionFollowedBySlideCropParsing = self.parseCrop(questionFollowedBySlideCropString)
 
                 if slideFollowedByQuestionLineMatch is not None:
-                    slideSFBQList[slideNum].append(cgi.escape(slideFollowedByQuestionLineMatch.group('line')))
+                    slideSFBQList[slideNum].append(html.escape(slideFollowedByQuestionLineMatch.group('line')))
 
                     slideFollowedByQuestionCropString = slideFollowedByQuestionLineMatch.group('crop')
                     if slideFollowedByQuestionCropString is not None:
                         slideFollowedByQuestionCropParsing = self.parseCrop(slideFollowedByQuestionCropString)
 
                 if answerWithoutSlideLineMatch is not None:
-                    slideAWSList[slideNum].append(cgi.escape(answerWithoutSlideLineMatch.group('line')))
+                    slideAWSList[slideNum].append(html.escape(answerWithoutSlideLineMatch.group('line')))
 
                 if answerFollowedBySlideLineMatch is not None:
-                    slideAFBSList[slideNum].append(cgi.escape(answerFollowedBySlideLineMatch.group('line')))
+                    slideAFBSList[slideNum].append(html.escape(answerFollowedBySlideLineMatch.group('line')))
 
                     answerFollowedBySlideCropString = answerFollowedBySlideLineMatch.group('crop')
                     if answerFollowedBySlideCropString is not None:
                         answerFollowedBySlideCropParsing = self.parseCrop(answerFollowedBySlideCropString)
 
                 if slideFollowedByAnswerLineMatch is not None:
-                    slideSFBAList[slideNum].append(cgi.escape(slideFollowedByAnswerLineMatch.group('line')))
+                    slideSFBAList[slideNum].append(html.escape(slideFollowedByAnswerLineMatch.group('line')))
 
                     slideFollowedByAnswerCropString = slideFollowedByAnswerLineMatch.group('crop')
                     if slideFollowedByAnswerCropString is not None:
